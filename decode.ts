@@ -1,4 +1,4 @@
-import {Encoder, intToBytes, intFromBytes} from "./encode";
+import {intToBytes, intFromBytes} from "./encode";
 import {PRNG} from './prng';
 
 
@@ -104,6 +104,9 @@ export class Decoder {
 
 
     public decode(data: string): boolean {
+        if (!this.isBlockValid(data))
+            return false;
+
         const next_block = this.readBlocks(data).next().value;
         return this.consume_block(next_block);
     }
@@ -118,7 +121,8 @@ export class Decoder {
         let out_stream = Buffer.alloc(0);
 
         for (let i = 0; i < this.num_blocks; i++) {
-            const block_data = intToBytes(sorted_blocks[i][1], this.block_size, 'big');
+            const sorted_block = sorted_blocks[i];
+            const block_data = intToBytes(sorted_block[1], this.block_size, 'big');
 
             if (i < this.num_blocks - 1 || this.file_size % this.block_size === 0) {
                 out_stream = Buffer.concat([out_stream, block_data]);
@@ -139,7 +143,7 @@ export class Decoder {
             this._initialize(length, size, blockseed);
 
 
-        const [blockseed_, source_blocks] = this.prng.sample_source_blocks();
+        const [blockseed_, source_blocks] = this.prng.sample_source_blocks(blockseed);
         return this.block_graph.add_block(source_blocks, block_data);
     }
 
@@ -170,5 +174,10 @@ export class Decoder {
             blockseed: Number(blockseed[1]),
             block_data: block_data_
         };
+    }
+
+
+    private isBlockValid(block: string): boolean {
+        return block.match(/<length>(.*?)<\/length><size>(.*?)<\/size><seed>(.*?)<\/seed><data>(.*?)<\/data>/) !== null;
     }
 }

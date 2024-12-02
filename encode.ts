@@ -51,7 +51,7 @@ export class Encoder {
         const prng = new PRNG(blocks.length, this.seed);
 
         while (true) {
-            const [blockseed, sampledBlocks] = prng.sample_source_blocks();
+            const [blockseed, sampledBlocks] = prng.sample_source_blocks(null);
             let blockData = BigInt(0);
 
             for (const x of sampledBlocks) {

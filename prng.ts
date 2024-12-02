@@ -14,7 +14,11 @@ export class PRNG {
     }
 
 
-    public sample_source_blocks(): [number, Set<number>] {
+    public sample_source_blocks(state: number | null): [number, Set<number>] {
+        if (state !== null) {
+            this.state = state;
+        }
+
         const seed = this.state;
         const degree = this.sampleDegree();
 
