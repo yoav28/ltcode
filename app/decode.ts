@@ -1,4 +1,4 @@
-import {intFromBytes, intToBytes} from "./utils";
+import {intFromBytes, intToBytes, concatUint8Arrays} from "./utils";
 import {PRNG} from './prng';
 
 
@@ -112,27 +112,27 @@ export class Decoder {
     }
 
 
-    public result(): Buffer {
+    public result(): Uint8Array {
         if (!this.initialized || !this.num_blocks || !this.file_size || !this.block_size) {
             throw new Error("Decoder not initialized");
         }
 
         const sorted_blocks = Array.from(this.block_graph.eliminated.entries()).sort((a, b) => a[0] - b[0]);
-        let out_stream = Buffer.alloc(0);
+        let out_stream: Uint8Array[] = [];
 
         for (let i = 0; i < this.num_blocks; i++) {
             const sorted_block = sorted_blocks[i];
             const block_data = intToBytes(sorted_block[1], this.block_size, 'big');
 
             if (i < this.num_blocks - 1 || this.file_size % this.block_size === 0) {
-                out_stream = Buffer.concat([out_stream, block_data]);
+                out_stream.push(block_data);
             } else {
                 const x = block_data.subarray(0, this.file_size % this.block_size)
-                out_stream = Buffer.concat([out_stream, x]);
+                out_stream.push(x);
             }
         }
 
-        return out_stream;
+        return concatUint8Arrays(out_stream);
     }
 
 

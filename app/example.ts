@@ -4,9 +4,11 @@ import {Encoder} from "./encode";
 
 
 const text = "Hello, World! This is a test message to be encoded and decoded.".repeat(10);
-const encoder = new Encoder();
 
+const encoder = new Encoder();
 const encoded = encoder.encode(text);
+console.log(encoded)
+
 const decoder = new Decoder();
 
 

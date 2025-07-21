@@ -20,7 +20,7 @@ export class Encoder {
     }
 
 
-    private getBlocks(data: Buffer): bigint[] {
+    private getBlocks(data: Uint8Array): bigint[] {
         const blocks = [] as bigint[];
 
         for (let i = 0; i < data.length; i += this.size) {
@@ -35,7 +35,7 @@ export class Encoder {
 
 
     public * encode(data: string): Generator<string> {
-        const blocks = this.getBlocks(Buffer.from(data));
+        const blocks = this.getBlocks(new TextEncoder().encode(data));
         const prng = new PRNG(blocks.length, this.seed);
 
         while (true) {

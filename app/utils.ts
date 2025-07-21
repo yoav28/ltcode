@@ -3,12 +3,12 @@ export function intToBytes(
     input: bigint,
     size: number,
     order: "big" | "little" = "big"
-): Buffer {
+): Uint8Array {
     if (size < 0) {
         throw new RangeError("Size must be non-negative");
     }
 
-    const bytes = new Array<number>(size);
+    const bytes = new Uint8Array(size);
     let n = input;
 
     if (order === "little") {
@@ -23,11 +23,11 @@ export function intToBytes(
         }
     }
 
-    return Buffer.from(bytes);
+    return bytes;
 }
 
 export function intFromBytes(
-    buffer: Buffer,
+    buffer: Uint8Array,
     order: "big" | "little" = "big"
 ): bigint {
     let result = BigInt(0);
@@ -42,5 +42,19 @@ export function intFromBytes(
         }
     }
 
+    return result;
+}
+
+export function concatUint8Arrays(arrays: Uint8Array[]): Uint8Array {
+    let totalLength = 0;
+    for (const arr of arrays) {
+        totalLength += arr.length;
+    }
+    const result = new Uint8Array(totalLength);
+    let offset = 0;
+    for (const arr of arrays) {
+        result.set(arr, offset);
+        offset += arr.length;
+    }
     return result;
 }

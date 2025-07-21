@@ -12,5 +12,12 @@
       "node",
       "jest"
     ]
-  }
+  },
+  "include": [
+    "app/**/*.ts",
+    "index.ts"
+  ],
+  "exclude": [
+    "__tests__"
+  ]
 }
