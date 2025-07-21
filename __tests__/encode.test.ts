@@ -7,14 +7,11 @@ describe('Encoder', () => {
 		const text = "Hello, World!";
 		const encodedGenerator = encoder.encode(text);
 
-		const firstBlock = encodedGenerator.next().value;
-		expect(firstBlock).toMatch(/<length>\d+<\/length><size>\d+<\/size><seed>\d+<\/seed><data>\d+<\/data>/);
+		const firstBlock = JSON.parse(encodedGenerator.next().value);
 
 		// Verify length and size are correct
-		const lengthMatch = firstBlock.match(/<length>(.*?)<\/length>/);
-		const sizeMatch = firstBlock.match(/<size>(.*?)<\/size>/);
-		expect(Number(lengthMatch![1])).toBe(text.length);
-		expect(Number(sizeMatch![1])).toBe(10);
+		expect(firstBlock.length).toBe(text.length);
+		expect(firstBlock.size).toBe(10);
 	});
 
 	it('should correctly split data into blocks based on size', () => {

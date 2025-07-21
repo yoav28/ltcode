@@ -159,25 +159,30 @@ export class Decoder {
 
 
     private * readBlocks(data: string): Generator<BlockData> {
-        const length = data.match(/<length>(.*?)<\/length>/) as RegExpMatchArray;
-        const block_data = data.match(/<data>(.*?)<\/data>/) as RegExpMatchArray;
-        const blockseed = data.match(/<seed>(.*?)<\/seed>/) as RegExpMatchArray;
-        const size = data.match(/<size>(.*?)<\/size>/) as RegExpMatchArray;
+        const {size, length, seed, data: block_data} = JSON.parse(data);
 
-        const block_data_int = BigInt(block_data[1]);
-        const bytes = intToBytes(block_data_int, Number(size[1]), "little");
+        const block_data_int = BigInt(block_data);
+        const bytes = intToBytes(block_data_int, Number(size), "little");
         const block_data_ = intFromBytes(bytes, "big");
 
         return {
-            size: Number(size[1]),
-            length: Number(length[1]),
-            blockseed: Number(blockseed[1]),
+            size: Number(size),
+            length: Number(length),
+            blockseed: Number(seed),
             block_data: block_data_
         };
     }
 
 
     private isBlockValid(block: string): boolean {
-        return block.match(/<length>(.*?)<\/length><size>(.*?)<\/size><seed>(.*?)<\/seed><data>(.*?)<\/data>/) !== null;
+        try {
+            const {length, size, seed, data} = JSON.parse(block);
+            return typeof length === 'number' &&
+                typeof size === 'number' &&
+                typeof seed === 'number' &&
+                typeof data === 'string';
+        } catch (e) {
+            return false;
+        }
     }
 }

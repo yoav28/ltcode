@@ -47,7 +47,12 @@ export class Encoder {
                 blockData ^= nextBlock;
             }
 
-            yield `<length>${data.length}</length><size>${this.size}</size><seed>${blockseed}</seed><data>${blockData}</data>`;
+            yield JSON.stringify({
+                length: data.length,
+                size: this.size,
+                seed: blockseed,
+                data: blockData.toString()
+            });
         }
     }
 }
