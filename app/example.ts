@@ -3,11 +3,10 @@ import {Encoder} from "./encode";
 
 
 
-const text = "Hello, World! This is a test message to be encoded and decoded.".repeat(10);
+const text = "Hello, World! ".repeat(10000);
 
 const encoder = new Encoder();
 const encoded = encoder.encode(text);
-console.log(encoded)
 
 const decoder = new Decoder();
 
@@ -21,4 +20,4 @@ while (true) {
     }
 }
 
-console.log(decoder.result().toString());
+console.log(decoder.result());

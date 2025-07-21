@@ -33,9 +33,25 @@ export class Decoder {
         const next_block = this.readBlocks(data).next().value;
         return this.consume_block(next_block);
     }
+    
+
+    public getProgress(): number {
+        if (!this.initialized || this.num_blocks == null) {
+            return 0;
+        }
+
+        const eliminated = this.block_graph.eliminated.size;
+        return Math.round(eliminated / this.num_blocks * 100);
+    }
+    
+    
+    public result(): string {
+        const bytes = this.resultBytes();
+        return bytes.reduce((acc, byte) => acc + String.fromCharCode(byte), '');
+    }
 
 
-    public result(): Uint8Array {
+    public resultBytes(): Uint8Array {
         if (!this.initialized || !this.num_blocks || !this.file_size || !this.block_size) {
             throw new Error("Decoder not initialized");
         }
@@ -66,7 +82,7 @@ export class Decoder {
             this._initialize(length, size, blockseed);
 
 
-        const [blockseed_, source_blocks] = this.prng.sample_source_blocks(blockseed);
+        const [_, source_blocks] = this.prng.sample_source_blocks(blockseed);
         return this.block_graph.add_block(source_blocks, block_data);
     }
 

@@ -1,5 +1,5 @@
-import {PRNG} from './prng';
 import {intFromBytes} from "./utils";
+import {PRNG} from './prng';
 
 
 export class Encoder {
