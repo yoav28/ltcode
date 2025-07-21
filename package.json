@@ -1,7 +1,7 @@
 {
-	"name": "luby-transform-code",
+	"name": "lt-code",
 	"version": "1.0.0",
-	"description": "Luby Transform Code implementation in TypeScript",
+	"description": "Luby Transform Code implementation",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"files": [
