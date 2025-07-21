@@ -1,11 +1,31 @@
 {
+	"name": "luby",
+	"version": "1.0.0",
+	"description": "Luby Transform Code implementation in TypeScript",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"keywords": [
+		"ltc",
+		"luby",
+		"code",
+		"transform",
+		"timecode",
+		"encoder",
+		"decoder"
+	],
+	"license": "MIT",
+	"author": "Yoav Shalev yoavyshalev@gmail.com",
 	"dependencies": {
 		"@types/node": "^24.0.15",
 		"typescript": "^5.8.3"
 	},
 	"scripts": {
 		"start": "ts-node app/example.ts",
-		"test": "jest"
+		"test": "jest",
+		"build": "tsc"
 	},
 	"packageManager": "pnpm@9.13.2+sha1.969cc200a41db98449afee1bfa7578b3ce6ff330",
 	"devDependencies": {
