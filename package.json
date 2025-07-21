@@ -1,5 +1,5 @@
 {
-	"name": "lt-code",
+	"name": "ltcode",
 	"version": "1.0.0",
 	"description": "Luby Transform Code implementation",
 	"main": "dist/index.js",
