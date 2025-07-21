@@ -1,5 +1,5 @@
 {
-	"name": "luby",
+	"name": "luby-transform-code",
 	"version": "1.0.0",
 	"description": "Luby Transform Code implementation in TypeScript",
 	"main": "dist/index.js",
