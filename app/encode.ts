@@ -8,12 +8,12 @@ export class Encoder {
 
 
     constructor(size: number = 100, seed?: number) {
-        this.seed = seed || this.getRandomSeed(1073741824);
+        this.seed = seed || this.randomSeed(1073741824);
         this.blockSize = size;
     }
 
 
-    private getRandomSeed(max: number): number {
+    private randomSeed(max: number): number {
         const min = 0;
         const number = Math.random() * (max - min) + min;
         return Math.floor(number);
@@ -34,7 +34,7 @@ export class Encoder {
     }
 
     
-    public generateEncodedBlock(data: string, blocks: bigint[], prng: PRNG): string {
+    private generateEncodedBlock(data: string, blocks: bigint[], prng: PRNG): string {
         const [blockseed, sampledBlocks] = prng.sample_source_blocks(null);
         let blockData = BigInt(0);
 
@@ -50,7 +50,8 @@ export class Encoder {
         });
     }
 
-    public * generateBlocks(data: string): Generator<string> {
+    
+    public * encode(data: string): Generator<string> {
         const blocks = this.splitToBlocks(new TextEncoder().encode(data));
         const prng = new PRNG(blocks.length, this.seed);
 
