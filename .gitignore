@@ -1,0 +1,13 @@
+
+
+.idea
+.vscode
+.DS_Store
+*.log
+*.tmp
+*.bak
+*.js
+
+
+node_modules
+dist

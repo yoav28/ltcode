@@ -1,25 +1,26 @@
 
 export class PRNG {
-    private state: number;
+    private seed: number;
     private readonly numBlocks: number;
     private readonly cumulativeDistributionFunction: number[];
     private readonly DEFAULT_DELTA: number = 0.5;
     private readonly PRNG_M: number = 2147483647;
 
 
-    constructor(numBlocks: number, state: number) {
-        this.state = state;
+    constructor(numBlocks: number, seed: number) {
+        this.seed = seed;
         this.numBlocks = numBlocks;
         this.cumulativeDistributionFunction = this.generateRsdCdf();
     }
 
 
-    public sample_source_blocks(state: number | null): [number, Set<number>] {
-        if (state !== null) {
-            this.state = state;
+    public sample_source_blocks(seed: number | null): [number, Set<number>] {
+        const initialSamplingSeed = seed !== null ? seed : this.seed;
+
+        if (seed !== null) {
+            this.seed = seed;
         }
 
-        const seed = this.state;
         const degree = this.sampleDegree();
 
         const selectedBlocks = new Set<number>();
@@ -30,13 +31,13 @@ export class PRNG {
             selectedBlocks.add(blockNumber);
         }
 
-        return [seed, selectedBlocks];
+        return [initialSamplingSeed, selectedBlocks];
     }
 
 
     private nextRandom(): number {
-        this.state = 16807 * this.state % this.PRNG_M;
-        return this.state;
+        this.seed = 16807 * this.seed % this.PRNG_M;
+        return this.seed;
     }
 
 

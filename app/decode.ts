@@ -1,4 +1,4 @@
-import {intToBytes, intFromBytes} from "./encode";
+import {intFromBytes, intToBytes} from "./utils";
 import {PRNG} from './prng';
 
 
