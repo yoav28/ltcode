@@ -1,39 +1,44 @@
 
-export function intToBytes(n: bigint, size: number, order: "big" | "little" = "big"): Buffer {
-    const bytes = [] as number[];
+export function intToBytes(
+    input: bigint,
+    size: number,
+    order: "big" | "little" = "big"
+): Buffer {
+    if (size < 0) {
+        throw new RangeError("Size must be non-negative");
+    }
+
+    const bytes = new Array<number>(size);
+    let n = input;
 
     if (order === "little") {
         for (let i = 0; i < size; i++) {
-            const byte = n % BigInt(256);
-            bytes.push(Number(byte));
-            n = n / BigInt(256);
+            bytes[i] = Number(n & BigInt(0xFF));
+            n >>= BigInt(8);
+        }
+    } else { // "big"
+        for (let i = size - 1; i >= 0; i--) {
+            bytes[i] = Number(n & BigInt(0xFF));
+            n >>= BigInt(8);
         }
     }
-
-    if (order === "big") {
-        for (let i = 0; i < size; i++) {
-            const byte = n >> BigInt((size - 1 - i) * 8) & BigInt(0xFF);
-            bytes.push(Number(byte));
-        }
-    }
-
 
     return Buffer.from(bytes);
 }
 
-
-export function intFromBytes(block: Buffer, order: "big" | "little" = "big"): bigint {
+export function intFromBytes(
+    buffer: Buffer,
+    order: "big" | "little" = "big"
+): bigint {
     let result = BigInt(0);
 
     if (order === "big") {
-        for (let i = 0; i < block.length; i++) {
-            result = result * BigInt(256) + BigInt(block[i]);
+        for (const byte of buffer) {
+            result = (result << BigInt(8)) | BigInt(byte);
         }
-    }
-
-    if (order === "little") {
-        for (let i = block.length - 1; i >= 0; i--) {
-            result = result * BigInt(256) + BigInt(block[i]);
+    } else { // "little"
+        for (let i = buffer.length - 1; i >= 0; i--) {
+            result = (result << BigInt(8)) | BigInt(buffer[i]);
         }
     }
 

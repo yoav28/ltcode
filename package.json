@@ -10,8 +10,8 @@
 	"packageManager": "pnpm@9.13.2+sha1.969cc200a41db98449afee1bfa7578b3ce6ff330",
 	"devDependencies": {
 		"@types/jest": "^30.0.0",
-		"jest": "^30.0.4",
 		"ts-jest": "^29.4.0",
-		"ts-node": "^10.9.2"
+		"ts-node": "^10.9.2",
+		"jest": "^30.0.4"
 	}
 }
