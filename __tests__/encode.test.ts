@@ -5,7 +5,7 @@ describe('Encoder', () => {
 	it('should encode a simple string into blocks', () => {
 		const encoder = new Encoder(10); // Block size of 10
 		const text = "Hello, World!";
-		const encodedGenerator = encoder.encode(text);
+		const encodedGenerator = encoder.generateBlocks(text);
 
 		const firstBlock = JSON.parse(encodedGenerator.next().value);
 
@@ -17,7 +17,7 @@ describe('Encoder', () => {
 	it('should correctly split data into blocks based on size', () => {
 		const encoder = new Encoder(3); // Block size of 3
 		const text = "abcdefghij"; // 10 characters
-		const encodedGenerator = encoder.encode(text);
+		const encodedGenerator = encoder.generateBlocks(text);
 
 		// We expect 4 blocks: abc, def, ghi, j (padded)
 		// The actual block data is XORed, so we can't directly check content here.
