@@ -4,6 +4,10 @@
 	"description": "Luby Transform Code implementation.",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/yoav28/ltcode"
+	},
 	"files": [
 		"dist"
 	],
