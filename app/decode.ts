@@ -113,15 +113,20 @@ export class Decoder {
     }
 
 
-    private isBlockValid(block: string): boolean {
-        try {
-            const {length, size, seed, data} = JSON.parse(block);
-            return typeof length === 'number' &&
-                typeof size === 'number' &&
-                typeof seed === 'number' &&
-                typeof data === 'string';
-        } catch (e) {
-            return false;
+    private _isBlockValid(parsedBlock: any): boolean {
+        const {length, size, seed, data} = parsedBlock;
+        if (typeof length !== 'number') {
+            throw new Error('Invalid block: length is not a number.');
         }
+        if (typeof size !== 'number') {
+            throw new Error('Invalid block: size is not a number.');
+        }
+        if (typeof seed !== 'number') {
+            throw new Error('Invalid block: seed is not a number.');
+        }
+        if (typeof data !== 'string') {
+            throw new Error('Invalid block: data is not a string.');
+        }
+        return true;
     }
 }
