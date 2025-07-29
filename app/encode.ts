@@ -3,12 +3,13 @@ import {PRNG} from './prng';
 
 
 export class Encoder {
+    private readonly MAX_SEED_VALUE: number = 1073741824;
     private readonly seed: number;
     private readonly blockSize: number;
 
 
     constructor(size: number = 100, seed?: number) {
-        this.seed = seed || this.randomSeed(1073741824);
+        this.seed = seed || this.randomSeed(this.MAX_SEED_VALUE);
         this.blockSize = size;
     }
 
