@@ -24,14 +24,15 @@ export class BlockGraph {
 
 
 	add_block(nodes: Set<number>, data: bigint): boolean {
+		const to_eliminate: [number, bigint][] = [];
 		if (nodes.size === 1) {
 			const next = nodes.values().next().value as number;
-			let to_eliminate = Array.from(this.eliminate(next, data));
+			to_eliminate.push(...Array.from(this.eliminate(next, data)));
+		}
 
-			while (to_eliminate.length) {
-				const [other, check] = to_eliminate.pop() as [number, bigint];
-				to_eliminate.push(...this.eliminate(other, check));
-			}
+		while (to_eliminate.length > 0) {
+			const [other, check] = to_eliminate.pop() as [number, bigint];
+			to_eliminate.push(...Array.from(this.eliminate(other, check)));
 		}
 
 		for (const node of nodes) {
@@ -42,7 +43,13 @@ export class BlockGraph {
 		}
 
 		if (nodes.size === 1) {
-			return this.add_block(nodes, data);
+			const next = nodes.values().next().value as number;
+			to_eliminate.push(...Array.from(this.eliminate(next, data)));
+		
+			while (to_eliminate.length > 0) {
+				const [other, check] = to_eliminate.pop() as [number, bigint];
+				to_eliminate.push(...Array.from(this.eliminate(other, check)));
+			}
 		}
 
 		return this._create_check_node(nodes, data);
