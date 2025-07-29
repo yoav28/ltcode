@@ -5,6 +5,8 @@ export class PRNG {
     private readonly cumulativeDistributionFunction: number[];
     private readonly DEFAULT_DELTA: number = 0.5;
     private readonly PRNG_M: number = 2147483647;
+    private readonly LCG_MULTIPLIER: number = 16807;
+    private readonly S_SCALING_FACTOR: number = 0.1;
 
 
     constructor(numBlocks: number, seed: number) {
@@ -36,7 +38,7 @@ export class PRNG {
 
 
     private nextRandom(): number {
-        this.seed = 16807 * this.seed % this.PRNG_M;
+        this.seed = this.LCG_MULTIPLIER * this.seed % this.PRNG_M;
         return this.seed;
     }
 
@@ -70,7 +72,7 @@ export class PRNG {
 
 
     private generateMu(): number[] {
-        const S = Math.log(this.numBlocks / this.DEFAULT_DELTA) * Math.sqrt(this.numBlocks) * 0.1;
+        const S = Math.log(this.numBlocks / this.DEFAULT_DELTA) * Math.sqrt(this.numBlocks) * this.S_SCALING_FACTOR;
         const tau = this.generateTau(S);
         const rho = this.generateRho();
         const normalizer = this.sum(rho) + this.sum(tau);
