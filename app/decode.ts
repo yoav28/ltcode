@@ -27,10 +27,18 @@ export class Decoder {
 
 
     public decode(data: string): boolean {
-        if (!this.isBlockValid(data))
-            return false;
+        let parsedBlock: any;
+        try {
+            parsedBlock = JSON.parse(data);
+        } catch (e: any) {
+            throw new Error(`Failed to parse block data: ${e.message}`);
+        }
 
-        const next_block = this.readBlocks(data).next().value;
+        if (!this._isBlockValid(parsedBlock)) {
+            return false;
+        }
+
+        const next_block = this._readBlockData(parsedBlock);
         return this.consume_block(next_block);
     }
     
@@ -97,8 +105,8 @@ export class Decoder {
     }
 
 
-    private * readBlocks(data: string): Generator<BlockData> {
-        const {size, length, seed, data: block_data} = JSON.parse(data);
+    private _readBlockData(parsedBlock: any): BlockData {
+        const {size, length, seed, data: block_data} = parsedBlock;
 
         const block_data_int = BigInt(block_data);
         const bytes = intToBytes(block_data_int, Number(size), "little");
